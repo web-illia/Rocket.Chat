@@ -5,6 +5,7 @@ import { useToggle } from '@rocket.chat/fuselage-hooks';
 import React, { FC, memo } from 'react';
 
 import UserAvatar from '../../../../components/avatar/UserAvatar';
+import { usePresence } from '../../../../hooks/usePresence';
 import { useMessageActions } from '../../contexts/MessageContext';
 import { useIsMessageHighlight } from '../contexts/MessageHighlightContext';
 import { useIsSelecting, useToggleSelect, useIsSelectedMessage, useCountSelected } from '../contexts/SelectedMessagesContext';
@@ -25,6 +26,7 @@ const Message: FC<{ message: IMessage; sequential: boolean; subscription?: ISubs
 	const {
 		actions: { openUserCard },
 	} = useMessageActions();
+	const user = usePresence(message.u._id);
 
 	const isSelecting = useIsSelecting();
 	const toggleSelected = useToggleSelect(message._id);
@@ -43,7 +45,13 @@ const Message: FC<{ message: IMessage; sequential: boolean; subscription?: ISubs
 		>
 			<MessageLeftContainer>
 				{!sequential && message.u.username && !isSelecting && (
-					<UserAvatar username={message.u.username} size={'x36'} onClick={openUserCard(message.u.username)} style={{ cursor: 'pointer' }} />
+					<UserAvatar
+						username={message.u.username}
+						size={'x36'}
+						etag={user?.avatarETag}
+						onClick={openUserCard(message.u.username)}
+						style={{ cursor: 'pointer' }}
+					/>
 				)}
 				{isSelecting && <CheckBox checked={isSelected} onChange={toggleSelected} />}
 				{sequential && <MessageIndicators message={message} />}
