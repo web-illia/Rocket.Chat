@@ -17,17 +17,16 @@ import React, { FC } from 'react';
 import UserAvatar from '../../../../components/avatar/UserAvatar';
 import { useMessageActions } from '../../contexts/MessageContext';
 import { useIsSelecting, useToggleSelect, useIsSelectedMessage, useCountSelected } from '../contexts/SelectedMessagesContext';
+import { useMessageBody } from '../hooks/useMessageBody';
 import { useParentMessage } from '../hooks/useParentMessage';
-import { useParentMessageTransform } from '../hooks/useParentMessageTransform';
 import MessageContentBody from './MessageContentBody';
-import MessageRender from './MessageRender';
 
 export const ThreadMessagePreview: FC<{ message: IThreadMessage; sequential: boolean }> = ({ message, sequential, ...props }) => {
 	const {
 		actions: { openThread },
 	} = useMessageActions();
 	const getParentMessage = useParentMessage(message.tmid);
-	const parentMessage = useParentMessageTransform(getParentMessage.value);
+	const parentMessage = useMessageBody(getParentMessage.value);
 	const user = useUser();
 	const t = useTranslation();
 
