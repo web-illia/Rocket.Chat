@@ -16,13 +16,9 @@ type CustomTextProps = {
 	};
 };
 
-const CustomText = ({ text, wordsToHighlight, katex }: CustomTextProps): ReactElement | null => {
+const CustomText = ({ text, wordsToHighlight, katex }: CustomTextProps): ReactElement => {
 	// TODO: chapter day frontend: remove dangerouslySetInnerHTML, convert to tokens and do not mix with katex
 	const html = wordsToHighlight?.length ? getHighlightHtml(text, wordsToHighlight) : text;
-	if (!html) {
-		return null;
-	}
-
 	if (katex) {
 		return <Katex text={html} options={{ dollarSyntax: katex.dollarSyntaxEnabled, parenthesisSyntax: katex.parenthesisSyntaxEnabled }} />;
 	}
