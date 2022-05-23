@@ -1,6 +1,6 @@
 import { AutoComplete, Box, Option, Chip } from '@rocket.chat/fuselage';
 import { useMutableCallback, useDebouncedValue } from '@rocket.chat/fuselage-hooks';
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useMemo, useState, useCallback } from 'react';
 
 import { useEndpointData } from '../../hooks/useEndpointData';
 import UserAvatar from '../avatar/UserAvatar';
@@ -20,6 +20,7 @@ const UserAutoCompleteMultiple = (props) => {
 		e.preventDefault();
 		props.onChange(e.currentTarget.value, 'remove');
 	});
+	const getAvatarETag = useCallback((user) => data && data.items.find(({ username }) => username === user)?.avatarETag, [data]);
 
 	return (
 		<AutoComplete
@@ -29,17 +30,17 @@ const UserAutoCompleteMultiple = (props) => {
 			renderSelected={({ value: selected }) =>
 				selected?.map((value) => (
 					<Chip key={value} {...props} height='x20' value={value} onClick={onClickRemove} mie='x4'>
-						<UserAvatar size='x20' username={value} />
+						<UserAvatar size='x20' username={value} etag={getAvatarETag(value)} />
 						<Box is='span' margin='none' mis='x4'>
 							{value}
 						</Box>
 					</Chip>
 				))
 			}
-			renderItem={({ value, label, ...props }) => (
+			renderItem={({ value, label, avatarETag, ...props }) => (
 				<Option key={value} {...props}>
 					<Option.Avatar>
-						<UserAvatar username={value} size='x20' />
+						<UserAvatar username={value} size='x20' etag={getAvatarETag(value)} />
 					</Option.Avatar>
 					<Option.Content>
 						{label} <Option.Description>({value})</Option.Description>
