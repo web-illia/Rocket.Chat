@@ -155,6 +155,9 @@ const propsAreEqual = (prevProps, nextProps) => {
 	if (prevProps.room.teamMain !== nextProps.room.teamMain) {
 		return false;
 	}
+	if (prevProps.room.avatarETag !== nextProps.room.avatarETag) {
+		return false;
+	}
 
 	return true;
 };
