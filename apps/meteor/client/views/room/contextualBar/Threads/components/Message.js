@@ -5,6 +5,7 @@ import * as NotificationStatus from '../../../../../components/Message/Notificat
 import { followStyle, anchor } from '../../../../../components/Message/helpers/followSyle';
 import RawText from '../../../../../components/RawText';
 import UserAvatar from '../../../../../components/avatar/UserAvatar';
+import { usePresence } from '../../../../../hooks/usePresence';
 
 function isIterable(obj) {
 	// checks for null and undefined
@@ -18,6 +19,7 @@ export default React.memo(function MessageThread({
 	_id,
 	msg,
 	following,
+	uid,
 	username,
 	name = username,
 	ts,
@@ -35,11 +37,12 @@ export default React.memo(function MessageThread({
 }) {
 	const button = !following ? 'bell-off' : 'bell';
 	const actionLabel = t(!following ? 'Not_Following' : 'Following');
+	const user = usePresence(uid);
 	return (
 		<Box className={className} pb='x8'>
 			<Message {...props} className={[...(isIterable(className) ? className : [className]), !following && followStyle].filter(Boolean)}>
 				<Message.LeftContainer>
-					<UserAvatar username={username} className='rcx-message__avatar' size='x36' />
+					<UserAvatar username={username} className='rcx-message__avatar' size='x36' etag={user?.avatarETag} />
 				</Message.LeftContainer>
 				<Message.Container>
 					<Message.Header>
