@@ -146,16 +146,6 @@ FlowRouter.route('/livechat-queue', {
 	},
 });
 
-FlowRouter.route('/account/:group?', {
-	name: 'account',
-	action: () => {
-		const AccountRoute = createTemplateForComponent('AccountRoute', () => import('../views/account/AccountRoute'), {
-			attachment: 'at-parent',
-		});
-		appLayout.renderMainLayout({ center: AccountRoute });
-	},
-});
-
 FlowRouter.route('/terms-of-service', {
 	name: 'terms-of-service',
 	action: () => {
